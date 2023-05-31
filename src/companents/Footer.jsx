@@ -8,36 +8,43 @@ const Footer = () => {
     let dispatch = useDispatch();
     const removeToDos = () => {
         dispatch(empty())
-    
+
     }
-    const [choose, setChoose] = useState()
-  return (
-    <footer className="footer">
-    <span className="todo-count">
-        <strong>{todoReducer.filtertodos.filter((item)=>item.active==false).length} </strong>
+
+    const [chooseActive, setChooseActive] = useState()
+    const [chooseCompleted, setChooseCompleted] = useState()
+
+    let handleChange = (item) => {
+        dispatch(filterToDo(item))
+        item ==false?setChooseActive(true):setChooseActive(false)
+        item ==true?setChooseCompleted(true):setChooseCompleted(false)
+
+    }
+    return (
+        <footer className="footer">
+            <span className="todo-count">
+                <strong>{todoReducer.filtertodos.filter((item) => item.active == false).length} </strong>
         items left
     </span>
 
-    <ul className="filters">
-        <li>
-            <a href="#" className="selected" onClick={()=>dispatch(filterToDo())}>All</a>
-        </li>
-        <li>
-            <a href="#" onClick={()=>dispatch(filterToDo(false))}>Active</a>
-        </li>
-        <li>
-            <a href="#" onClick={()=>dispatch(filterToDo(true))}> Completed</a>
-        </li>
-    </ul>
+            <ul className="filters">
+                <li>
+                    <a href="#" className={(chooseActive==false &&  chooseCompleted==false) || chooseActive==undefined  || chooseCompleted==undefined ? "selected" : ""}  onClick={() => handleChange()}>All</a>
+                </li>
+                <li>
+                    <a href="#" className={chooseActive ? "selected" : ""} onClick={() => handleChange(false)}>Active</a>
+                </li>
+                <li>
+                    <a href="#" className={chooseCompleted ? "selected" : ""} onClick={() => handleChange(true)}> Completed</a>
+                </li>
+            </ul>
 
-    <button className="clear-completed" onClick={removeToDos}>
-        Clear completed
+            <button className="clear-completed" onClick={removeToDos}>
+                Clear completed
     </button>
-    <div style={{display:'none'}}>
-    <TodoList choose={choose}  />
-    </div>
-</footer>
-  )
+
+        </footer>
+    )
 }
 
 export default Footer
