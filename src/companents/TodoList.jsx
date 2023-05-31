@@ -1,18 +1,19 @@
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToDo , toggleTodo} from "../store/todoSlice";
 
-const TodoList = () => {
+const TodoList = ({choose}) => {
+  console.log(choose)
   let dispatch = useDispatch();
 
   let { todoReducer } = useSelector((state) => state);
-  const [styles, setStyles] = useState([]);
+  const [todosArr, setTodosArr] = useState([]);
+
 
   let changeStyle = (index) => {
-    // const updatedStyles = [...styles];
-    // updatedStyles[index] = !updatedStyles[index];
-    // setStyles(updatedStyles);
-    const updatedTodos = todoReducer.todos.map((todo, i) =>(
+    
+    const updatedTodos = todoReducer.filtertodos.map((todo, i) =>(
     i === index ? { ...todo, active: !todo.active } : todo)
   ); 
   dispatch(toggleTodo(updatedTodos));
@@ -24,8 +25,9 @@ const TodoList = () => {
   };
   return (
     <ul className="todo-list">
-      {todoReducer.todos &&
-        todoReducer.todos.map((item, index) => (
+      {/* {choose==undefined ? 
+      todoReducer.todos &&
+        todoReducer.todos.filter((item)=>item.active==true).map((item, index) => (
           <li className={!item.active ? "completed" : ""} key={index}>
             <div className="view">
               <input
@@ -40,28 +42,29 @@ const TodoList = () => {
               ></button>
             </div>
           </li>
-        ))}
-      {/* <li className="completed">
+        ))
+      : */}
+      {
+      todoReducer.filtertodos &&
+        todoReducer.filtertodos.map((item, index) => (
+          <li className={!item.active ? "completed" : ""} key={index}>
             <div className="view">
-                <input className="toggle" type="checkbox" />
-                <label>Learn JavaScript</label>
-                <button className="destroy"></button>
+              <input
+                className={item.active ? "toggle" : "toggle-checked"}
+                type="checkbox"
+                onClick={() => changeStyle(index)}
+              />
+              <label>{item.item}</label>
+              <button
+                className="destroy"
+                onClick={() => removeToDos(item.id)}
+              ></button>
             </div>
-        </li>
-        <li>
-            <div className="view">
-                <input className="toggle" type="checkbox" />
-                <label>Learn React</label>
-                <button className="destroy"></button>
-            </div>
-        </li>
-        <li>
-            <div className="view">
-                <input className="toggle" type="checkbox" />
-                <label>Have a life!</label>
-                <button className="destroy"></button>
-            </div>
-        </li> */}
+          </li>
+        ))
+        
+        }
+     
     </ul>
   );
 };

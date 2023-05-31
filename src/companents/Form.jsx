@@ -8,7 +8,8 @@ const Form = () => {
 
     let dispatch = useDispatch();
 
-    const addNewTodo = () => {
+    const addNewTodo = (event) => {
+      event.preventDefault();
         let newTodo = {
             id: Math.floor(Math.random() * 10000),
             item:item,
@@ -16,7 +17,7 @@ const Form = () => {
         }
 
         dispatch(addToDo(newTodo))
-        setItem('')
+         setItem('')
     }
 
 
